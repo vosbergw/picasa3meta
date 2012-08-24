@@ -195,7 +195,7 @@ def main():
             
             print "reading pmp index file .... ",
             picasaDb = thumbindex.ThumbIndex(thumbfile)          
-            print "%d records"%picasaDb.entries
+            print "%d records"%picasaDb.entries           
             #for i in range(picasaDb.entries):
             #    print "%d:%s"%(i,picasaDb.imageFullName(i))
             
@@ -234,7 +234,7 @@ def main():
                     oF = open(outFile,"w")
                     # pmp index
                     index = picasaDb.indexOfFile(os.path.join(pmpDir,outBase))
-                    oF.write("pmp.index:%d\n"%index)                    
+                    oF.write("pmp.index:%d\n"%index)  
                     # pmp info
                     for K,V in pmpDB.getEntry(index):
                         oF.write("pmp.%s:%s\n"%(K,V))
@@ -263,9 +263,27 @@ def main():
                                         else:
                                             ang = -10.0*float(a)
                                             oF.write("pmp.%s.%s:%f\n"%(K,f,ang))
+                                    elif f == "fill":
+                                        q,r = v.split(',')
+                                        if q != "1":
+                                            raise "error: unknown fill %s"%v
+                                        else:
+                                            oF.write("pmp.%s.%s:%s\n"%(K,f,r))
+                                    elif f == "crop64":
+                                        q,r = v.split(',')
+                                        if q != "1":
+                                            raise "error: unknown crop %s"%v
+                                        else:
+                                            mx = float(int(0xffff))
+                                            x1 = float((int(r,16)&0xffff000000000000)>>48)/mx
+                                            y1 = float((int(r,16)&0x0000ffff00000000)>>32)/mx
+                                            x2 = float((int(r,16)&0x00000000ffff0000)>>16)/mx
+                                            y2 = float( int(r,16)&0x000000000000ffff)/mx
+                                            oF.write("pmp.%s.%sxy:%f,%f,%f,%f\n"%(K,f,x1,y1,x2,y2))                             
                                     else:
                                         oF.write("pmp.%s.%s:%s\n"%(K,f,v))
                                 except:
+                                    #print "filter error: %s (%s)(%s)"%(F,sys.exc_info()[0],sys.exc_info()[1])
                                     pass                        
                     # ini info
                     for ini in iniO:

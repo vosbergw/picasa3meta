@@ -84,12 +84,12 @@ class IniInfo(object):
                         "unexpected lines in %s before a file designator"%
                         iniFile)
                 else:  
-                    self.contents[self.names[i-1]].append(line)
+                    self.contents[self.names[i-1]].append(line.replace('=',':',1))
                     (key,sep,val) = line.partition('=')
                     if key == "faces":
-                        sfaces = "sfaces="
+                        sfaces = "sfaces:"
                         for people in val.split(';'):
-                            if sfaces != "sfaces=":
+                            if sfaces != "sfaces:":
                                 sfaces += ","
                             person = people.split(',')
                             sfaces += '"'+contacts.getContact(person[1])+'"'
@@ -103,7 +103,7 @@ class IniInfo(object):
                         x2 = float((crop64&0x00000000ffff0000)>>16)/mx
                         y2 = float( crop64&0x000000000000ffff)/mx
                         self.contents[self.names[i-1]].append(
-                            "cropxy=%f,%f,%f,%f"%(x1,y1,x2,y2))                                     
+                            "cropxy:%f,%f,%f,%f"%(x1,y1,x2,y2))                                     
         inIni.close()
         
     def getFileEntry(self,image):
