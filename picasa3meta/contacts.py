@@ -22,12 +22,9 @@ import xml.sax
 
 class Contacts(object):
     '''
-    Read the Picasa3 contacts.xml file into a list of the form:
-    
-    [ id1=name1, id2=name2, ... ]
-    
-    The Picasa3 contacts.xml file has the form:
-    
+    Read the Picasa3 contacts.xml file into a list of the form:   
+    [ id1=name1, id2=name2, ... ]    
+    The Picasa3 contacts.xml file has the form:   
         <contacts>
             <contact id="16hexdigits" name="First Last" display="Nickname" 
                 modified_time="2011-12-12T15:09:12+01:00" local_contact="1|0">
@@ -37,8 +34,6 @@ class Contacts(object):
              .
              .
         </contacts>
-
-    
     '''
 
 
