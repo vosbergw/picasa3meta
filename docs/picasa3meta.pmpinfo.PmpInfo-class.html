@@ -66,18 +66,49 @@ object --+
 <hr />
 <pre class="literalblock">
 
+
 Read an entire picasa pmp database table.  This table resides in multiple
-files in Picasa3/db3 with names: &lt;table_name&gt;_&lt;column_name&gt;.pmp
+files in Picasa3/db3 with names: &lt;table_name&gt;_&lt;column_name&gt;.pmp.  For example:
 
-usage:
+        imagedata_aliasparents.pmp  imagedata_onlinechecksum.pmp
+        imagedata_avgcolor.pmp      imagedata_originfast.pmp
+        imagedata_backuphash.pmp    imagedata_originslow.pmp
+        imagedata_caption.pmp       imagedata_peoplealbumchecksum.pmp
+        imagedata_colorspace.pmp    imagedata_personalbumid.pmp
+        imagedata_crop64.pmp        imagedata_personalbumrecs2.pmp
+        imagedata_deferredface.pmp  imagedata_personalbumrecs.pmp
+        imagedata_edited.pmp        imagedata_personalbumrecvalues2.pmp
+        imagedata_facequality.pmp   imagedata_personalbumrecvalues.pmp
+        imagedata_facerectdata.pmp  imagedata_redo.pmp
+        imagedata_facerect.pmp      imagedata_revertable.pmp
+        imagedata_fileflags.pmp     imagedata_rotate.pmp
+        imagedata_fileid.pmp        imagedata_suggestionpersonalbumid.pmp
+        imagedata_filetype.pmp      imagedata_suppress.pmp
+        imagedata_filters.pmp       imagedata_tags.pmp
+        imagedata_flipped.pmp       imagedata_textactive.pmp
+        imagedata_geoview.pmp       imagedata_text.pmp
+        imagedata_height.pmp        imagedata_uid64.pmp
+        imagedata_lat.pmp           imagedata_wayne@mindtunnel.com_lhlist.pmp
+        imagedata_long.pmp          imagedata_width.pmp
 
-from picasa3meta import pmpinfo
 
-pmp = pmpinfo.PmpInfo(&quot;imagedata&quot;,&quot;/path/to/Picasa3/db3&quot;)
+Usage:
 
-for K,V in pmp.colSizes():
-    print &quot;column %s has %d entries&quot;%(K,V)
-    
+        from picasa3meta import pmpinfo
+
+        pmp = pmpinfo.PmpInfo(&quot;/path/to/Picasa3/db3&quot;, &quot;imagedata&quot;)
+
+        print &quot;columns in %stable:&quot;%pmp.tableName
+        for col in pmp.columns:
+                print &quot;    %x&quot;%col
+
+        for col, size in pmp.colSizes():
+                print &quot;column %s has %d entries&quot;%(col,size)
+
+        print &quot;entry #500:&quot;
+        for col, value in pmp.getEntry(500):
+                print &quot;columns %s = %s&quot;%(col,value)
+        
 
 </pre>
 
@@ -126,7 +157,7 @@ for K,V in pmp.colSizes():
           <td><span class="summary-sig"><a href="picasa3meta.pmpinfo.PmpInfo-class.html#doHeader" class="summary-sig-name">doHeader</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">pmp</span>,
         <span class="summary-sig-arg">i</span>)</span><br />
-      read and verify the pmp header:</td>
+      read and verify the pmp file header:</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="picasa3meta.pmpinfo-pysrc.html#PmpInfo.doHeader">source&nbsp;code</a></span>
             
@@ -261,10 +292,9 @@ for K,V in pmp.colSizes():
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="variantTime"></a><span class="summary-sig-name">variantTime</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="picasa3meta.pmpinfo.PmpInfo-class.html#variantTime" class="summary-sig-name">variantTime</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">varT</span>)</span><br />
-      Return a floating point number as variant time (offset from 
-      1899:12:30 24:00)</td>
+      Return a float as variant time (offset from 1899:12:30 24:00)</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="picasa3meta.pmpinfo-pysrc.html#PmpInfo.variantTime">source&nbsp;code</a></span>
             
@@ -299,7 +329,7 @@ for K,V in pmp.colSizes():
         <tr>
           <td><span class="summary-sig"><a href="picasa3meta.pmpinfo.PmpInfo-class.html#getEntry" class="summary-sig-name">getEntry</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">index</span>)</span><br />
-      Return the entry in the form: [ col1name=val1, col2name=val2, ...</td>
+      Return the entry as a list of tuples:</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="picasa3meta.pmpinfo-pysrc.html#PmpInfo.getEntry">source&nbsp;code</a></span>
             
@@ -393,28 +423,28 @@ for K,V in pmp.colSizes():
 Read the entire table.  Class variables are:
 
 tableName: 
-    i.e. 'imagedata'
+        i.e. 'imagedata'
 columns: 
-    list of columns, i.e. [ 'caption', 'date', 'filter', ... ]
+        list of columns, i.e. [ 'caption', 'date', 'filter', ... ]
 data:
-    dictionary of all data, i.e. 
-    { 'caption':[ 'cap 0', 'cap 1', ... ], 
-      'date': [ d0, d1, ... ], ... }
+        dictionary of all data, i.e. 
+        { 'caption':[ 'cap 0', 'cap 1', ... ], 
+          'date': [ d0, d1, ... ], ... }
 magic: 
-    list of magic byte from each file.  shoule be 
-    [ 0x3fcccccd, 0x3fcccccd, ... ]
+        list of magic byte from each file.  shoule be 
+        [ 0x3fcccccd, 0x3fcccccd, ... ]
 type1: 
-    list of type of data in this column: [ 0, 3, 0, 1, ...]
-c1:    
-    list of static shorts in the header: [ 0x1332, 0x1332, ...]
-c2:    
-    list of static longs in the header: 
-    [ 0x02, 0x02, 0x02, ...] (see doHeader())
+        list of type of data in this column: [ 0, 3, 0, 1, ...]
+c1:     
+        list of static shorts in the header: [ 0x1332, 0x1332, ...]
+c2:     
+        list of static longs in the header: 
+        [ 0x02, 0x02, 0x02, ...] (see doHeader())
 type2: 
-    list of type of data in this column.  must =type1
+        list of type of data in this column.  must equal type1
 size:  
-    list of length of each column: [ 2000, 3000, 1295, ... ]
-    
+        list of length of each column: [ 2000, 3000, 1295, ... ]
+        
 
 </pre>
   <dl class="fields">
@@ -440,9 +470,31 @@ size:
     </td>
   </tr></table>
   
-  <p>read and verify the pmp header:</p>
-  <p>magic------|type1|c1---|c2---------|type2|size---------| 3f cc cc cd 
-  T1 T1 13 32 00 00 00 02 T2 T2 SS SS SS SS SS</p>
+  <p>read and verify the pmp file header:</p>
+  <p>magic------|type1|c1---|c2---------|type2|size----------| 3f cc cc 
+  cd|T1 T1|13 32|00 00 00 02|T2 T2|SS SS SS SS SS|</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="variantTime"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">variantTime</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">varT</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="picasa3meta.pmpinfo-pysrc.html#PmpInfo.variantTime">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return a float as variant time (offset from 1899:12:30 24:00)</p>
+  <p>Time zero is 1899 Dec 30 24:00.  So a time of -0.5 would be noon on 
+  Dec 30 and a time of 0.5 would be noon on Dec 31.</p>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -481,8 +533,15 @@ size:
     </td>
   </tr></table>
   
-  <p>Return the entry in the form: [ col1name=val1, col2name=val2, ... ] . 
-  . .</p>
+  <pre class="literalblock">
+
+Return the entry as a list of tuples:
+
+        [ (col1name,val1), (col2name,val2), ... ]
+
+If the index is not valid the val[n]'s will be all empty strings.
+
+</pre>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -514,7 +573,7 @@ size:
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Aug 27 19:04:46 2012
+    Generated by Epydoc 3.0.1 on Wed Aug 29 13:44:15 2012
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

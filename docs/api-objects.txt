@@ -6,7 +6,6 @@ picasa3meta.exiv2meta	picasa3meta.exiv2meta-module.html
 picasa3meta.exiv2meta.EXIV2Meta	picasa3meta.exiv2meta-module.html#EXIV2Meta
 picasa3meta.exiv2meta.__package__	picasa3meta.exiv2meta-module.html#__package__
 picasa3meta.iniinfo	picasa3meta.iniinfo-module.html
-picasa3meta.iniinfo.__package__	picasa3meta.iniinfo-module.html#__package__
 picasa3meta.pmpinfo	picasa3meta.pmpinfo-module.html
 picasa3meta.pmpinfo.locate	picasa3meta.pmpinfo-module.html#locate
 picasa3meta.pmpinfo.__package__	picasa3meta.pmpinfo-module.html#__package__

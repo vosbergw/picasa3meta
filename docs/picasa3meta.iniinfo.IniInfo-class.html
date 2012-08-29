@@ -64,19 +64,71 @@ object --+
 </pre>
 
 <hr />
-<p>Read a .picasa.ini file and save as a Python dictionary: { 
-  filename:[ent1, ent2, ent3, ...], filename:[en1, ent2, ent3, ...], ... 
-  }</p>
-  <p>If the entry is &quot;faces&quot;, create a new entry called 
-  &quot;sfaces&quot; consisting of the actual names from the contacts.xml 
-  file.  i.e.:</p>
-  <p>ini.faces=rect64(...),e1363a4accda66d5;rect64(...),d80c848976f5bab6 
-  ini.sfaces=&quot;Contact1 Name&quot;,&quot;Contact 2 Name&quot;</p>
-  <p>If the entry is &quot;crop&quot;, create a new entry called 
-  &quot;cropxy&quot; consisting of the x,y coordinates of the rectangle 
-  (upper left xy, lower right xy, 0.0 to 1.0 normalized.  i.e.:</p>
-  <p>ini.crop=rect64(5bf05d4f9bcfad1) 
-  ini.cropxy=0.022446,0.022766,0.975540,0.979767</p>
+<pre class="literalblock">
+
+
+Read a .picasa.ini file and save as a Python dictionary:
+{ filename:[ent1, ent2, ent3, ...], filename:[en1, ent2, ent3, ...], ... }
+
+Usage:
+
+        from picasa3meta import iniinfo
+
+        myIni = iniinfo.IniInfo(&quot;/path/to/.picasa.ini&quot; [, myContacts] )
+
+        print &quot;.picasa.ini file in %s&quot;%myIni.filePaht
+
+        for imageFile in myIni.names:
+                print &quot;    image: %s&quot;%imageFile
+                for iniEntry in myIni.getFileEntry(imageFile):
+                        print &quot;        %s&quot;%iniEntry
+
+
+        --OR--
+
+        for imageFile, iniEntrys in myIni.contents.iteritems():
+                print &quot;    image: %s&quot;%imageFile
+                for iniEntry in iniEntrys:
+                        print &quot;        %s&quot;%iniEntry
+
+
+
+Picasa3 creates a .picasa.ini file in each directory listing with the format:
+
+        [Picasa]
+        name=Picasa Album Name
+        date=40788.407998
+        P2category=Folders on Disk
+        [IMG_0001.JPG]
+        backuphash=11776
+        caption=what is this
+        [IMG_0002.JPG]
+        backuphash=11886
+        caption=another photo
+        .
+        .
+        .
+
+This would return:
+
+        { 'IMG_0001.JPG':['backuphash:11776', 'caption:what is this'], 
+                'IMG_0002.JPG':['backuphash:11886', 'caption:another photo'] }
+
+If you specify a 'contacts' object and the entry is &quot;faces&quot;, also create 
+a new entry called &quot;sfaces&quot; consisting of the actual names from the 
+contacts.xml file.  i.e.:
+
+        faces:rect64(...),e1363a4accda66d5;rect64(...),d80c848976f5bab6
+        sfaces:&quot;Contact1 Name&quot;,&quot;Contact 2 Name&quot;
+
+If the entry is &quot;crop&quot;, create a new entry called &quot;cropxy&quot; consisting
+of the x,y coordinates of the rectangle (upper left xy, lower right xy,
+0.0 to 1.0 normalized.  i.e.: 
+
+        crop=rect64(5bf05d4f9bcfad1)
+        cropxy=0.022446,0.022766,0.975540,0.979767
+
+</pre>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -103,8 +155,8 @@ object --+
         <tr>
           <td><span class="summary-sig"><a href="picasa3meta.iniinfo.IniInfo-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">iniFile</span>,
-        <span class="summary-sig-arg">contacts</span>)</span><br />
-      Read a .picasa.ini file into a dictionary.</td>
+        <span class="summary-sig-arg">contacts</span>=<span class="summary-sig-default">NULL</span>)</span><br />
+      Read a .picasa.ini file into a dict.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="picasa3meta.iniinfo-pysrc.html#IniInfo.__init__">source&nbsp;code</a></span>
             
@@ -122,8 +174,7 @@ object --+
         <tr>
           <td><span class="summary-sig"><a name="getFileEntry"></a><span class="summary-sig-name">getFileEntry</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">image</span>)</span><br />
-      Return a list object of the entries for this image from the contents 
-      dictionary</td>
+      Return a list of strings of the ini file entries for this image.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="picasa3meta.iniinfo-pysrc.html#IniInfo.getFileEntry">source&nbsp;code</a></span>
             
@@ -239,7 +290,7 @@ object --+
   <tr valign="top"><td>
   <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
         <span class="sig-arg">iniFile</span>,
-        <span class="sig-arg">contacts</span>)</span>
+        <span class="sig-arg">contacts</span>=<span class="sig-default">NULL</span>)</span>
     <br /><em class="fname">(Constructor)</em>
   </h3>
   </td><td align="right" valign="top"
@@ -247,9 +298,14 @@ object --+
     </td>
   </tr></table>
   
-  <p>Read a .picasa.ini file into a dictionary.  The full path to this 
-  .picasa.ini file is stored in self.filePath so it can be found again. 
-  contacts is a picasa3meta.contacts.Contacts class object</p>
+  <p>Read a .picasa.ini file into a dict.</p>
+  <p>The full path to this .picasa.ini file is stored in self.filePath so 
+  if you have multiple IniInfo objects you can keep them sorted.</p>
+  <p>A list of filename in this .picasa.ini is save in self.names[] for 
+  convenience.</p>
+  <p>The contents of this .picasa.ini are stored as self.contents{}</p>
+  <p>contacts, if specified, must be a picasa3meta.contacts.Contacts 
+  object.</p>
   <dl class="fields">
     <dt>Overrides:
         object.__init__
@@ -284,7 +340,7 @@ object --+
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Mon Aug 27 19:04:46 2012
+    Generated by Epydoc 3.0.1 on Wed Aug 29 13:44:15 2012
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
