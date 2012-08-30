@@ -73,7 +73,7 @@ class ThumbIndex(object):
 		|26 bytes unknown                                  |
 		|xx xx xx xx xx xx ............................. xx|	
 
-		|index			|repeat from 'null terminated path/file' above ...
+		|index      |repeat from 'null terminated path/file' above ...
 		|xx xx xx xx|	
 
 		The index is the index into the array for the entry of the parent 
