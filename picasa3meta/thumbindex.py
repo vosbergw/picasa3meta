@@ -69,10 +69,11 @@ class ThumbIndex(object):
 	
 	def __init__(self,thumbindex):
 		'''
-		open file "thumbindex", verify the magic byte (0x40466666), and then 
-		read all entries into name[], pathIndex[] arrays
 
-								|start of array ->
+		Open file "thumbindex", verify the magic byte (0x40466666), and then 
+		read all entries into name[], pathIndex[] arrays.
+
+														|start of array ->
 		|magic byte |# entries  |null terminated path/file |  
 		|40 46 66 66|xx xx xx xx|ascii ................. 00|  
 
@@ -85,8 +86,8 @@ class ThumbIndex(object):
 		The index is the index into the array for the entry of the parent directory
 		of the file, or 0xffffffff if this entry is a directory.
 
-		If the file path/filename length is 0 then this file or path has been deleted.
-		Just set the index to 0xffffffff so that it is ignored.
+		If the file path/filename length is 0 then this file or path has been 
+		deleted.  Just set the index to 0xffffffff so that it is ignored.
 		
 		'''
 		
