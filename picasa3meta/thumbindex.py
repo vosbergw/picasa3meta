@@ -64,7 +64,24 @@ class ThumbIndex(object):
 		index = db.indexOfFile("/full/path/to/file.jpg")
 		for col, val in pmp.getEntry(index):
 			print "column %s is %s"%(col,val)
-	  
+	
+	The thumbindex.db file format is:
+
+		|magic byte |# entries	|null terminated path/file |	
+		|40 46 66 66|xx xx xx xx|ascii ................. 00|	
+
+		|26 bytes unknown                                  |
+		|xx xx xx xx xx xx ............................. xx|	
+
+		|index			|repeat from 'null terminated path/file' above ...
+		|xx xx xx xx|	
+
+		The index is the index into the array for the entry of the parent 
+		directory of the file, or 0xffffffff if this entry is a directory.
+
+		If the file path/filename length is 0 then this file or path has been 
+		deleted.	Just set the index to 0xffffffff so that it is ignored.
+
 	'''
 	
 	def __init__(self,thumbindex):
@@ -72,22 +89,6 @@ class ThumbIndex(object):
 
 		Open file "thumbindex", verify the magic byte (0x40466666), and then 
 		read all entries into name[], pathIndex[] arrays.
-
-														|start of array ->
-		|magic byte |# entries  |null terminated path/file |  
-		|40 46 66 66|xx xx xx xx|ascii ................. 00|  
-
-		|26 bytes unknown                                  |  
-		|xx xx xx xx xx xx ............................. xx|  
-
-		|index      |repeat from 'start of array' above ...
-		|xx xx xx xx|  
-
-		The index is the index into the array for the entry of the parent directory
-		of the file, or 0xffffffff if this entry is a directory.
-
-		If the file path/filename length is 0 then this file or path has been 
-		deleted.  Just set the index to 0xffffffff so that it is ignored.
 		
 		'''
 		
