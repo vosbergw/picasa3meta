@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>picasa3meta.thumbindex.ThumbIndex</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="picasa3meta-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="picasa3meta-module.html">Package&nbsp;picasa3meta</a> ::
+        <a href="picasa3meta.thumbindex-module.html">Module&nbsp;thumbindex</a> ::
+        Class&nbsp;ThumbIndex
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="picasa3meta.thumbindex.ThumbIndex-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class ThumbIndex</h1><p class="nomargin-top"><span class="codelink"><a href="picasa3meta.thumbindex-pysrc.html#ThumbIndex">source&nbsp;code</a></span></p>
+<pre class="base-tree">
+object --+
+         |
+        <strong class="uidshort">ThumbIndex</strong>
+</pre>
+
+<hr />
+<pre class="literalblock">
+
+Read the Picasa3 thumbindex.db file, verify the magic byte and save 
+all entries into the name[] and pathIndex[] lists
+        
+If a files has been removed from Picasa3 that thumbindex entry will not be 
+reused.  Requesting that entry will return a null file/path name.  
+
+Requesting the index of a file that does not exist (or has been deleted)
+will return -1 (0xffffffff)
+
+usage: 
+        from picasa3meta import thumbindex
+        
+        db = thumbindex.ThumbIndex(&quot;/path/to/Picasa3/db3/thumbindex.db&quot;)
+
+        # find index of image.jpg data in Picasa3 imagedata_xxx.pmp files
+        pmpIndex = db.indexOfFile(&quot;/full/path/to/Picasa3/image.jpg&quot;)
+
+        # find the basename of the image file at pmpIndex
+        imageName = db.imageName(pmpIndex)
+
+        # find the path of the image file at pmpIndex
+        imagePath = db.imagePath(pmpIndex)
+
+        # return the full path/file name of the image file at pmpIndex
+        imageFullName = db.imageFullName(pmpIndex)
+
+        # assuming pmp is a pmpinfo object for the imagedata table, retrieve
+        # the database entry for a file
+        index = db.indexOfFile(&quot;/full/path/to/file.jpg&quot;)
+        for col, val in pmp.getEntry(index):
+                print &quot;column %s is %s&quot;%(col,val)
+  
+
+</pre>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="picasa3meta.thumbindex.ThumbIndex-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">thumbindex</span>)</span><br />
+      open file &quot;thumbindex&quot;, verify the magic byte (0x40466666), and then 
+read all entries into name[], pathIndex[] arrays</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="picasa3meta.thumbindex-pysrc.html#ThumbIndex.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="picasa3meta.thumbindex.ThumbIndex-class.html#indexOfFile" class="summary-sig-name">indexOfFile</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">findMe</span>)</span><br />
+      Find the index into the imagedata_xxx.pmp files for an image file.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="picasa3meta.thumbindex-pysrc.html#ThumbIndex.indexOfFile">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="picasa3meta.thumbindex.ThumbIndex-class.html#imagePath" class="summary-sig-name">imagePath</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">what</span>)</span><br />
+      Find the path of the file at entry 'what'.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="picasa3meta.thumbindex-pysrc.html#ThumbIndex.imagePath">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="picasa3meta.thumbindex.ThumbIndex-class.html#imageName" class="summary-sig-name">imageName</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">what</span>)</span><br />
+      Find the basename of the file at entry 'what'.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="picasa3meta.thumbindex-pysrc.html#ThumbIndex.imageName">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="picasa3meta.thumbindex.ThumbIndex-class.html#imageFullName" class="summary-sig-name">imageFullName</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">what</span>)</span><br />
+      Find the full path name of the file/directory at entry 'what'.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="picasa3meta.thumbindex-pysrc.html#ThumbIndex.imageFullName">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="dump"></a><span class="summary-sig-name">dump</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">what</span>)</span><br />
+      diagnostic dump of the entry at 'what'</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="picasa3meta.thumbindex-pysrc.html#ThumbIndex.dump">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
+      <code>__format__</code>,
+      <code>__getattribute__</code>,
+      <code>__hash__</code>,
+      <code>__new__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__repr__</code>,
+      <code>__setattr__</code>,
+      <code>__sizeof__</code>,
+      <code>__str__</code>,
+      <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Properties</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Properties"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">thumbindex</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="picasa3meta.thumbindex-pysrc.html#ThumbIndex.__init__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+
+open file &quot;thumbindex&quot;, verify the magic byte (0x40466666), and then 
+read all entries into name[], pathIndex[] arrays
+
+                                                |start of array -&gt;
+|magic byte |# entries  |null terminated path/file |  
+|40 46 66 66|xx xx xx xx|ascii ................. 00|  
+
+|26 bytes unknown                                  |  
+|xx xx xx xx xx xx ............................. xx|  
+
+|index      |repeat from 'start of array' above ...
+|xx xx xx xx|  
+
+The index is the index into the array for the entry of the parent directory
+of the file, or 0xffffffff if this entry is a directory.
+
+If the file path/filename length is 0 then this file or path has been deleted.
+Just set the index to 0xffffffff so that it is ignored.
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__init__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="indexOfFile"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">indexOfFile</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">findMe</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="picasa3meta.thumbindex-pysrc.html#ThumbIndex.indexOfFile">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Find the index into the imagedata_xxx.pmp files for an image file. 
+  Returns -1 if the image file is not found.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="imagePath"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">imagePath</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">what</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="picasa3meta.thumbindex-pysrc.html#ThumbIndex.imagePath">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Find the path of the file at entry 'what'.</p>
+  <p>If entry 'what' is a directory itself or is an image that has been 
+  removed, just return an empty string.  An exception will be thrown if you
+  ask for an entry &gt; number of entries in thumbindex.db 
+  (self.entries)</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="imageName"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">imageName</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">what</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="picasa3meta.thumbindex-pysrc.html#ThumbIndex.imageName">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Find the basename of the file at entry 'what'.</p>
+  <p>An exception will be thrown if you ask for an entry &gt; number of 
+  entries in thumbindex.db (self.entries)</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="imageFullName"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">imageFullName</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">what</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="picasa3meta.thumbindex-pysrc.html#ThumbIndex.imageFullName">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Find the full path name of the file/directory at entry 'what'.</p>
+  <p>An exception will be thrown if you ask for an entry &gt; number of 
+  entries in thumbindex.db (self.entries)</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="picasa3meta-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Thu Aug 30 10:13:46 2012
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

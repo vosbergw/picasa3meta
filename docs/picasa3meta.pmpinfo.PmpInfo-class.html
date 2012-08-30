@@ -1,0 +1,595 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>picasa3meta.pmpinfo.PmpInfo</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="picasa3meta-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="picasa3meta-module.html">Package&nbsp;picasa3meta</a> ::
+        <a href="picasa3meta.pmpinfo-module.html">Module&nbsp;pmpinfo</a> ::
+        Class&nbsp;PmpInfo
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="picasa3meta.pmpinfo.PmpInfo-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class PmpInfo</h1><p class="nomargin-top"><span class="codelink"><a href="picasa3meta.pmpinfo-pysrc.html#PmpInfo">source&nbsp;code</a></span></p>
+<pre class="base-tree">
+object --+
+         |
+        <strong class="uidshort">PmpInfo</strong>
+</pre>
+
+<hr />
+<pre class="literalblock">
+
+
+Read an entire picasa pmp database table.  This table resides in multiple
+files in Picasa3/db3 with names: &lt;table_name&gt;_&lt;column_name&gt;.pmp.  For example:
+
+        imagedata_aliasparents.pmp  imagedata_onlinechecksum.pmp
+        imagedata_avgcolor.pmp      imagedata_originfast.pmp
+        imagedata_backuphash.pmp    imagedata_originslow.pmp
+        imagedata_caption.pmp       imagedata_peoplealbumchecksum.pmp
+        imagedata_colorspace.pmp    imagedata_personalbumid.pmp
+        imagedata_crop64.pmp        imagedata_personalbumrecs2.pmp
+        imagedata_deferredface.pmp  imagedata_personalbumrecs.pmp
+        imagedata_edited.pmp        imagedata_personalbumrecvalues2.pmp
+        imagedata_facequality.pmp   imagedata_personalbumrecvalues.pmp
+        imagedata_facerectdata.pmp  imagedata_redo.pmp
+        imagedata_facerect.pmp      imagedata_revertable.pmp
+        imagedata_fileflags.pmp     imagedata_rotate.pmp
+        imagedata_fileid.pmp        imagedata_suggestionpersonalbumid.pmp
+        imagedata_filetype.pmp      imagedata_suppress.pmp
+        imagedata_filters.pmp       imagedata_tags.pmp
+        imagedata_flipped.pmp       imagedata_textactive.pmp
+        imagedata_geoview.pmp       imagedata_text.pmp
+        imagedata_height.pmp        imagedata_uid64.pmp
+        imagedata_lat.pmp           imagedata_wayne@mindtunnel.com_lhlist.pmp
+        imagedata_long.pmp          imagedata_width.pmp
+
+
+Usage:
+
+        from picasa3meta import pmpinfo
+
+        pmp = pmpinfo.PmpInfo(&quot;/path/to/Picasa3/db3&quot;, &quot;imagedata&quot;)
+
+        print &quot;columns in %stable:&quot;%pmp.tableName
+        for col in pmp.columns:
+                print &quot;    %x&quot;%col
+
+        for col, size in pmp.colSizes():
+                print &quot;column %s has %d entries&quot;%(col,size)
+
+        print &quot;entry #500:&quot;
+        for col, value in pmp.getEntry(500):
+                print &quot;columns %s = %s&quot;%(col,value)
+        
+
+</pre>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="picasa3meta.pmpinfo.PmpInfo-class.html#__init__" class="summary-sig-name">__init__</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">dbpath</span>,
+        <span class="summary-sig-arg">dbtable</span>)</span><br />
+      Read the entire table.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="picasa3meta.pmpinfo-pysrc.html#PmpInfo.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="picasa3meta.pmpinfo.PmpInfo-class.html#doHeader" class="summary-sig-name">doHeader</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">pmp</span>,
+        <span class="summary-sig-arg">i</span>)</span><br />
+      read and verify the pmp file header:</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="picasa3meta.pmpinfo-pysrc.html#PmpInfo.doHeader">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="doStrings"></a><span class="summary-sig-name">doStrings</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">pmp</span>,
+        <span class="summary-sig-arg">columnName</span>)</span><br />
+      Read null terminated strings into dictionary data[columnName][x]</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="picasa3meta.pmpinfo-pysrc.html#PmpInfo.doStrings">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="doUint"></a><span class="summary-sig-name">doUint</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">pmp</span>,
+        <span class="summary-sig-arg">columnName</span>,
+        <span class="summary-sig-arg">size</span>)</span><br />
+      Read unsigned ints into dictionary data[columnName][x]</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="picasa3meta.pmpinfo-pysrc.html#PmpInfo.doUint">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="doUshort"></a><span class="summary-sig-name">doUshort</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">pmp</span>,
+        <span class="summary-sig-arg">columnName</span>,
+        <span class="summary-sig-arg">size</span>)</span><br />
+      Read unsigned short's into dictionary data[columnName][x]</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="picasa3meta.pmpinfo-pysrc.html#PmpInfo.doUshort">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="doByte"></a><span class="summary-sig-name">doByte</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">pmp</span>,
+        <span class="summary-sig-arg">columnName</span>,
+        <span class="summary-sig-arg">size</span>)</span><br />
+      Read bytes into dictionary data[columnName][x]</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="picasa3meta.pmpinfo-pysrc.html#PmpInfo.doByte">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="doUlong"></a><span class="summary-sig-name">doUlong</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">pmp</span>,
+        <span class="summary-sig-arg">columnName</span>,
+        <span class="summary-sig-arg">size</span>)</span><br />
+      Read unsigned long's into dictionary data[columnName][x]</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="picasa3meta.pmpinfo-pysrc.html#PmpInfo.doUlong">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="doFloat"></a><span class="summary-sig-name">doFloat</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">pmp</span>,
+        <span class="summary-sig-arg">columnName</span>,
+        <span class="summary-sig-arg">size</span>)</span><br />
+      Read float values into dictionary data[columnName][x]</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="picasa3meta.pmpinfo-pysrc.html#PmpInfo.doFloat">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="picasa3meta.pmpinfo.PmpInfo-class.html#variantTime" class="summary-sig-name">variantTime</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">varT</span>)</span><br />
+      Return a float as variant time (offset from 1899:12:30 24:00)</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="picasa3meta.pmpinfo-pysrc.html#PmpInfo.variantTime">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="picasa3meta.pmpinfo.PmpInfo-class.html#colSizes" class="summary-sig-name">colSizes</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Return a list of tuples [ (columname, size), (...), ...</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="picasa3meta.pmpinfo-pysrc.html#PmpInfo.colSizes">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="picasa3meta.pmpinfo.PmpInfo-class.html#getEntry" class="summary-sig-name">getEntry</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">index</span>)</span><br />
+      Return the entry as a list of tuples:</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="picasa3meta.pmpinfo-pysrc.html#PmpInfo.getEntry">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__delattr__</code>,
+      <code>__format__</code>,
+      <code>__getattribute__</code>,
+      <code>__hash__</code>,
+      <code>__new__</code>,
+      <code>__reduce__</code>,
+      <code>__reduce_ex__</code>,
+      <code>__repr__</code>,
+      <code>__setattr__</code>,
+      <code>__sizeof__</code>,
+      <code>__str__</code>,
+      <code>__subclasshook__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PROPERTIES ==================== -->
+<a name="section-Properties"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Properties</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Properties"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr>
+    <td colspan="2" class="summary">
+    <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
+      <code>__class__</code>
+      </p>
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="__init__"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">__init__</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">dbpath</span>,
+        <span class="sig-arg">dbtable</span>)</span>
+    <br /><em class="fname">(Constructor)</em>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="picasa3meta.pmpinfo-pysrc.html#PmpInfo.__init__">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+
+Read the entire table.  Class variables are:
+
+tableName: 
+        i.e. 'imagedata'
+columns: 
+        list of columns, i.e. [ 'caption', 'date', 'filter', ... ]
+data:
+        dictionary of all data, i.e. 
+        { 'caption':[ 'cap 0', 'cap 1', ... ], 
+          'date': [ d0, d1, ... ], ... }
+magic: 
+        list of magic byte from each file.  shoule be 
+        [ 0x3fcccccd, 0x3fcccccd, ... ]
+type1: 
+        list of type of data in this column: [ 0, 3, 0, 1, ...]
+c1:     
+        list of static shorts in the header: [ 0x1332, 0x1332, ...]
+c2:     
+        list of static longs in the header: 
+        [ 0x02, 0x02, 0x02, ...] (see doHeader())
+type2: 
+        list of type of data in this column.  must equal type1
+size:  
+        list of length of each column: [ 2000, 3000, 1295, ... ]
+        
+
+</pre>
+  <dl class="fields">
+    <dt>Overrides:
+        object.__init__
+    </dt>
+  </dl>
+</td></tr></table>
+</div>
+<a name="doHeader"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">doHeader</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">pmp</span>,
+        <span class="sig-arg">i</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="picasa3meta.pmpinfo-pysrc.html#PmpInfo.doHeader">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>read and verify the pmp file header:</p>
+  <p>magic------|type1|c1---|c2---------|type2|size----------| 3f cc cc 
+  cd|T1 T1|13 32|00 00 00 02|T2 T2|SS SS SS SS SS|</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="variantTime"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">variantTime</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">varT</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="picasa3meta.pmpinfo-pysrc.html#PmpInfo.variantTime">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return a float as variant time (offset from 1899:12:30 24:00)</p>
+  <p>Time zero is 1899 Dec 30 24:00.  So a time of -0.5 would be noon on 
+  Dec 30 and a time of 0.5 would be noon on Dec 31.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="colSizes"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">colSizes</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="picasa3meta.pmpinfo-pysrc.html#PmpInfo.colSizes">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Return a list of tuples [ (columname, size), (...), ... ]</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="getEntry"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">getEntry</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">index</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="picasa3meta.pmpinfo-pysrc.html#PmpInfo.getEntry">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <pre class="literalblock">
+
+Return the entry as a list of tuples:
+
+        [ (col1name,val1), (col2name,val2), ... ]
+
+If the index is not valid the val[n]'s will be all empty strings.
+
+</pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="picasa3meta-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Thu Aug 30 10:13:46 2012
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
