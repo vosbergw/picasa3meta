@@ -69,8 +69,24 @@ class ThumbIndex(object):
 	
 	def __init__(self,thumbindex):
 		'''
-		open file "thumbindex", verify the magic byte, and then read all 
-		entries into name[], pathIndex[] arrays
+		open file "thumbindex", verify the magic byte (0x40466666), and then 
+		read all entries into name[], pathIndex[] arrays
+
+								|start of array ->
+		|magic byte |# entries  |null terminated path/file |  
+		|40 46 66 66|xx xx xx xx|ascii ................. 00|  
+
+		|26 bytes unknown                                  |  
+		|xx xx xx xx xx xx ............................. xx|  
+
+		|index      |repeat from 'start of array' above ...
+		|xx xx xx xx|  
+
+		The index is the index into the array for the entry of the parent directory
+		of the file, or 0xffffffff if this entry is a directory.
+
+		If the file path/filename length is 0 then this file or path has been deleted.
+		Just set the index to 0xffffffff so that it is ignored.
 		
 		'''
 		
@@ -103,6 +119,7 @@ class ThumbIndex(object):
 					return
 			
 			# file/path name will terminate with a null or 0xff char
+			# 0xff?  not sure where this came from but I'm going to leave it in.
 			if self.b == chr(0xff) or self.b == chr(0):
 				self.a = self.inFile.read(26)   # toss the next 26 bytes
 				# the next int is the index into the names array of the 
@@ -122,14 +139,9 @@ class ThumbIndex(object):
 	
 	def indexOfFile(self,findMe):
 		'''
-		find the index into the imagedata_xxx.pmp files for an image file.  
+		
+		Find the index into the imagedata_xxx.pmp files for an image file.  
 		Returns -1 if the image file is not found.
-		
-		usage:
-		from picasa3meta import ThumbIndex
-		
-		db = ThumbIndex.ThumbIndex("/path/to/Picasa3/db3/thumbindex.db")
-		index = db.indexOfFile("/full/path/to/image.jpg")
 		
 		'''
 		
@@ -146,17 +158,12 @@ class ThumbIndex(object):
 	
 	def imagePath(self,what):
 		'''	   
-		Find the path of the file at entry N.
 		
-		If entry N is a directory itself or is an image that has been removed,
-		just return an empty string.  An exception will be thrown if you ask 
-		for an entry > number of entries in thumbindex.db (self.entries)
+		Find the path of the file at entry 'what'.
 		
-		usage:
-		from picasa3meta import thumbindex
-		
-		db = thumbindex.ThumbIndex("/path/to/Picasa3/db3/thumbindex.db")
-		path = db.imagePath(5555)
+		If entry 'what' is a directory itself or is an image that has been removed,
+		just return an empty string.  An exception will be thrown if you ask for an
+		entry > number of entries in thumbindex.db (self.entries)
 		
 		'''
 		
@@ -167,47 +174,29 @@ class ThumbIndex(object):
 		
 	def imageName(self,what):
 		'''	   
-		Find the basename of the file at entry N.
 		
-		If entry N is a directory it will end with "/".  if the entry has been
-		removed, return an empty string.  An exception will be thrown if you 
-		ask for an entry > number of entries in thumbindex.db (self.entries)
+		Find the basename of the file at entry 'what'.
+		
+		An exception will be thrown if you ask for an entry > number of entries in 
+		thumbindex.db (self.entries)
 
-		
-		usage:
-		from picasa3meta import thumbindex
-		
-		db = thumbindex.ThumbIndex("/path/to/Picasa3/db3/thumbindex.db")
-		path = db.imageName(5555)
-		
 		'''
 		
 		return self.name[what]
 	
 	def imageFullName(self,what):
 		'''	 
-		Find the full path name of the file/directory at entry N.
+		Find the full path name of the file/directory at entry 'what'.
 		
-		If entry N is a directory it will end with "/".  if the entry has been
-		removed, return an empty string.  An exception will be thrown if you 
-		ask for an entry > number of entries in thumbindex.db (self.entries)
-
-		
-		usage:
-		from picasa3meta import thumbindex
-		
-		db = thumbindex.ThumbIndex("/path/to/Picasa3/db3/thumbindex.db")
-		path = db.imageFullName(5555)
+		An exception will be thrown if you ask for an entry > number of entries in 
+		thumbindex.db (self.entries)
 		
 		'''
 		
 		return os.path.join(self.imagePath(what),self.imageName(what))
 	
 	def dump(self,what):
-		'''
-		diagnostic dump of the entry at N
-		
-		'''
+		'''diagnostic dump of the entry at 'what' '''
 		
 		if len(self.name[what]) > 0:		  
 			if self.pathIndex[what] == 0xffffffff:

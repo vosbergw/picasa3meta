@@ -189,8 +189,8 @@ class PmpInfo(object):
 		'''
 		read and verify the pmp file header:
 		
-		magic------|type1|c1---|c2---------|type2|size----------|
-		3f cc cc cd|T1 T1|13 32|00 00 00 02|T2 T2|SS SS SS SS SS|
+		magic------|type1|c1---|c2---------|type2|size----------| 
+		3f cc cc cd|T1 T1|13 32|00 00 00 02|T2 T2|SS SS SS SS SS| 
 		
 		'''
 		

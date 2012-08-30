@@ -94,7 +94,7 @@ class IniInfo(object):
 	'''
 	
 	
-	def __init__(self,iniFile,contacts=NULL):
+	def __init__(self,iniFile,contacts=None):
 		'''
 
 		Read a .picasa.ini file into a dict.  
@@ -139,7 +139,7 @@ class IniInfo(object):
 				else:  
 					self.contents[self.names[i-1]].append(line.replace('=',':',1))
 					(key,sep,val) = line.partition('=')
-					if key == "faces" and contacts != NULL:
+					if key == "faces" and contacts != None:
 						sfaces = "sfaces:"
 						for people in val.split(';'):
 							if sfaces != "sfaces:":
