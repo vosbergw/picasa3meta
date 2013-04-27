@@ -95,6 +95,8 @@ class ThumbIndex(object):
 		self.header = array.array('I')
 		self.entries = 0
 		self.name = []
+		self.unknown26 = []
+		self.orgPathIndex = array.array('I')
 		self.pathIndex = array.array('I')
 		
 		self.inFile = open(thumbindex,"rb")
@@ -123,10 +125,13 @@ class ThumbIndex(object):
 			# file/path name will terminate with a null or 0xff char
 			# 0xff?  not sure where this came from but I'm going to leave it in.
 			if self.b == chr(0xff) or self.b == chr(0):
-				self.a = self.inFile.read(26)   # toss the next 26 bytes
+				# self.a = self.inFile.read(26)   # toss the next 26 bytes
+				self.unknown26.append(array.array('B'))
+				self.unknown26[self.index].fromfile(self.inFile,26)
 				# the next int is the index into the names array of the 
 				# path to this file or 0xffffffff if this is a directory
 				self.pathIndex.fromfile(self.inFile,1)
+				self.orgPathIndex.append(self.pathIndex[self.index])
 				
 				if len(self.name[self.index]) == 0:
 					# if there was no file name read then this file or 
@@ -200,14 +205,23 @@ class ThumbIndex(object):
 	def dump(self,what):
 		'''diagnostic dump of the entry at 'what' '''
 		
-		if len(self.name[what]) > 0:		  
-			if self.pathIndex[what] == 0xffffffff:
-				# must be dir
-				return "entry["+str(what)+"]="+self.name[what]
-			else:
-				# must be file
-				return "entry["+str(what)+"]="+ \
-					self.name[self.pathIndex[what]]+self.name[what]
+		print '\n[%06d / %#08x] '%(what,what),
+		if self.orgPathIndex[what] == 0xffffffff: # directory
+			print 'd[%s] p[%#0x]'%(self.name[what],self.orgPathIndex[what])
 		else:
-			return "entry["+str(what)+"]= --deleted--"
+			if len(self.name[what]) > 0 and self.pathIndex[what] == 0xffffffff:
+				print 'r[%s] p[%06d]'%(self.name[what],self.orgPathIndex[what])
+			elif len(self.name[what]) > 0 and self.pathIndex[what] != 0xffffffff:
+				print 'f[%s] p[%06d : %s]'%(self.name[what],self.pathIndex[what],self.name[self.pathIndex[what]])
+			elif len(self.name[what]) == 0 and self.orgPathIndex != 0xffffffff:
+				print '?[%s] p[%06d : %s]'%(self.name[what],self.orgPathIndex[what],self.name[self.orgPathIndex[what]])
+			else:
+				print '-[%s] p[%06d]'%(self.name[what],self.orgPathIndex[what])
+		for i in range(26):
+			print '%02x '%self.unknown26[what][i],
+		print ''
+		
+		
+		#lse:
+		#	return "entry["+str(what)+"]= --deleted--"
 	

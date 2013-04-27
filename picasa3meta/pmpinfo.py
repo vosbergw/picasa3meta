@@ -150,13 +150,20 @@ class PmpInfo(object):
 			# remove everything before (and including) the first '_'
 			m = re.search('(?<=_)[^$]+',os.path.splitext(dbFile)[0]) 
 			self.columns[i] = m.group(0)
-				
+
 			pmp = open(dbFile,"rb")
 		
 			self.doHeader(pmp,i)
 		
 			if self.type1[i] == 0x0: # null terminated strings
 				count = self.doStrings(pmp,self.columns[i])
+
+				#if self.columns[i] == 'facerectdata':
+				#	print 'count is %d'%count
+				#	for n in range(count):
+				#		print '%04d = %s'%(n,self.data[self.columns[i]][n])
+
+				#print self.data[self.columns[i]]
 			elif self.type1[i] == 0x1:  # unsigned integers (4 bytes)
 				count = self.doUint(pmp,self.columns[i],self.size[i])
 			elif self.type1[i] == 0x2:  # double float (8 bytes)
@@ -174,10 +181,13 @@ class PmpInfo(object):
 			else:
 				raise PmpTypeError("unknown type: %d"%self.type1[i])
 			
+			if count == None:
+				count = 0
+				
 			if count != self.size[i]:
 				raise PmpSizeError(
-					"expected %d entries in %s/%s but read %d"%
-					(self.size[i],self.tableName,self.columns[i],count))
+					"expected %d entries in %s/%s"%
+					(self.size[i],self.tableName,self.columns[i])," but read",count)
 			
 			i += 1
 			pmp.close()
