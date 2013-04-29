@@ -99,6 +99,8 @@ class ThumbIndex(object):
 		self.orgPathIndex = array.array('I')
 		self.pathIndex = array.array('I')
 		
+		self.facesArray = {}
+		
 		self.inFile = open(thumbindex,"rb")
 		self.header.fromfile(self.inFile,2)
 				
@@ -138,6 +140,16 @@ class ThumbIndex(object):
 					# directory has been deleted.  Just set the path to 
 					# 0xffffffffff so we ignore it
 					self.pathIndex[self.index] = 0xffffffff
+					# now populate the facesArray dictionary --
+					# facesArray = { image_index:[ face1_index, face2_index, ...], ... }
+					#
+					if self.orgPathIndex[self.index] != 0xffffffff:
+						if self.facesArray.has_key(self.orgPathIndex[self.index]):
+							self.facesArray[self.orgPathIndex[self.index]].append(self.index)
+						else:
+							self.facesArray[self.orgPathIndex[self.index]] = []
+							self.facesArray[self.orgPathIndex[self.index]].append(self.index)
+							
 				self.index += 1
 				self.name.append("")
 			else:
@@ -202,6 +214,30 @@ class ThumbIndex(object):
 		
 		return os.path.join(self.imagePath(what),self.imageName(what))
 	
+	
+	
+	def getFaces(self,what):
+		'''return a list of the faces in 'what' '''
+		
+		if self.facesArray.has_key(what):
+			return self.facesArray[what]
+		else:
+			return None
+		
+		
+		
+	def dumpFaces(self,what):
+		'''dump the faces array for image 'what' '''
+		
+		if self.facesArray.has_key(what):
+			print 'list of faces for %d:%s'%(what,self.name[what]),'is ',self.facesArray[what]
+			return True
+		else:
+			#print 'no faces for %d:%s'%(what,self.name[what])
+			return False
+			
+		
+		
 	def dump(self,what):
 		'''diagnostic dump of the entry at 'what' '''
 		
@@ -221,7 +257,3 @@ class ThumbIndex(object):
 			print '%02x '%self.unknown26[what][i],
 		print ''
 		
-		
-		#lse:
-		#	return "entry["+str(what)+"]= --deleted--"
-	
