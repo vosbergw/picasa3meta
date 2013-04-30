@@ -221,15 +221,23 @@ class ThumbIndex(object):
 
 
     def getFaces(self, what):
-        '''return a list of the faces in 'what' '''
+        '''
+        Return a list of the faces in the image at index 'what'
+
+        returns a list item or None
+
+        '''
 
         if self.facesArray.has_key(what):
             return self.facesArray[what]
         else:
             return None
 
-    def hasFaces(selfself, what):
-        '''return true if there is an entry in facesArray for this entry'''
+    def hasFaces(self, what):
+        '''
+        Return true if there is an entry in facesArray for this entry
+
+        '''
 
         if self.facesArray.has_key(what):
             return True
