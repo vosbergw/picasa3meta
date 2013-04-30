@@ -20,62 +20,62 @@ import pyexiv2
 
 
 def EXIV2Meta(img):
-	'''
+    '''
 
-	Return a list of tuples of all the EXIF, IPTC and XMP metadata in a file.
-	
-	Usage:
-		from picasa3meta import exiv2meta
+    Return a list of tuples of all the EXIF, IPTC and XMP metadata in a file.
 
-		metaData = exiv2meta.EXIV2Meta("/path/to/file.jpg")
+    Usage:
+        from picasa3meta import exiv2meta
 
-		for key,value in metaData:
-			print "%s : %s"%(key,value)
+        metaData = exiv2meta.EXIV2Meta("/path/to/file.jpg")
 
-	Exif keys will return the human_value if possible, otherwise the raw_value.
+        for key,value in metaData:
+            print "%s : %s"%(key,value)
 
-	Iptc keys will return the raw_value first, if that fails, just value
+    Exif keys will return the human_value if possible, otherwise the raw_value.
 
-	Xmp keys may be dict objects.  If it is a dict, return a comma separated
-	list of the values.  Otherwise, try the raw_value first, then just value.
+    Iptc keys will return the raw_value first, if that fails, just value
 
-	'''
-	
-	try:
-		metadata = pyexiv2.ImageMetadata(img)
-		metadata.read()
-	except:
-		return zip( ['error'],['%s is not an image'%img])
-	else:
-		ret = []
+    Xmp keys may be dict objects.  If it is a dict, return a comma separated
+    list of the values.  Otherwise, try the raw_value first, then just value.
 
-		for K in metadata.exif_keys:
-			try:
-				ret.append(metadata[K].human_value)
-			except:
-				ret.append(metadata[K].raw_value)
+    '''
 
-		for K in metadata.iptc_keys:
-			try:
-				ret.append(metadata[K].raw_value[0])
-			except:
-				ret.append(metadata[K].value[0])
+    try:
+        metadata = pyexiv2.ImageMetadata(img)
+        metadata.read()
+    except:
+        return zip(['error'], ['%s is not an image' % img])
+    else:
+        ret = []
 
-		for K in metadata.xmp_keys:
-			if type(metadata[K].raw_value) == dict:
-				# if the xmp key is a dict, return it as a comma separated list.
-				nret=""
-				for KK in metadata[K].raw_value:
-					if len(nret) > 1:
-						nret = nret+","
-					nret = nret+metadata[K].raw_value[KK]
-				ret.append(nret)
-			else:
-				try:
-					ret.append(metadata[K].raw_value)
-				except:
-					ret.append(metadata[K].value)
-		 
-		# zip the keys and values into a list of tuples and return it
-		return zip(metadata.exif_keys+metadata.iptc_keys+metadata.xmp_keys, ret)
-	
+        for K in metadata.exif_keys:
+            try:
+                ret.append(metadata[K].human_value)
+            except:
+                ret.append(metadata[K].raw_value)
+
+        for K in metadata.iptc_keys:
+            try:
+                ret.append(metadata[K].raw_value[0])
+            except:
+                ret.append(metadata[K].value[0])
+
+        for K in metadata.xmp_keys:
+            if type(metadata[K].raw_value) == dict:
+                # if the xmp key is a dict, return it as a comma separated list
+                nret = ""
+                for KK in metadata[K].raw_value:
+                    if len(nret) > 1:
+                        nret = nret + ","
+                    nret = nret + metadata[K].raw_value[KK]
+                ret.append(nret)
+            else:
+                try:
+                    ret.append(metadata[K].raw_value)
+                except:
+                    ret.append(metadata[K].value)
+
+        # zip the keys and values into a list of tuples and return it
+        return zip(metadata.exif_keys + metadata.iptc_keys + metadata.xmp_keys,
+                    ret)

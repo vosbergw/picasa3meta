@@ -30,6 +30,7 @@ picasa3meta.iniinfo.IniStructError	picasa3meta.iniinfo.IniStructError-class.html
 picasa3meta.pmpinfo.PmpError	picasa3meta.pmpinfo.PmpError-class.html
 picasa3meta.pmpinfo.PmpInfo	picasa3meta.pmpinfo.PmpInfo-class.html
 picasa3meta.pmpinfo.PmpInfo.variantTime	picasa3meta.pmpinfo.PmpInfo-class.html#variantTime
+picasa3meta.pmpinfo.PmpInfo.getCol	picasa3meta.pmpinfo.PmpInfo-class.html#getCol
 picasa3meta.pmpinfo.PmpInfo.doUlong	picasa3meta.pmpinfo.PmpInfo-class.html#doUlong
 picasa3meta.pmpinfo.PmpInfo.doByte	picasa3meta.pmpinfo.PmpInfo-class.html#doByte
 picasa3meta.pmpinfo.PmpInfo.__init__	picasa3meta.pmpinfo.PmpInfo-class.html#__init__
@@ -46,10 +47,13 @@ picasa3meta.pmpinfo.PmpTypeError	picasa3meta.pmpinfo.PmpTypeError-class.html
 picasa3meta.thumbindex.MagicError	picasa3meta.thumbindex.MagicError-class.html
 picasa3meta.thumbindex.ThumbError	picasa3meta.thumbindex.ThumbError-class.html
 picasa3meta.thumbindex.ThumbIndex	picasa3meta.thumbindex.ThumbIndex-class.html
-picasa3meta.thumbindex.ThumbIndex.imagePath	picasa3meta.thumbindex.ThumbIndex-class.html#imagePath
 picasa3meta.thumbindex.ThumbIndex.dump	picasa3meta.thumbindex.ThumbIndex-class.html#dump
-picasa3meta.thumbindex.ThumbIndex.imageFullName	picasa3meta.thumbindex.ThumbIndex-class.html#imageFullName
 picasa3meta.thumbindex.ThumbIndex.indexOfFile	picasa3meta.thumbindex.ThumbIndex-class.html#indexOfFile
-picasa3meta.thumbindex.ThumbIndex.imageName	picasa3meta.thumbindex.ThumbIndex-class.html#imageName
 picasa3meta.thumbindex.ThumbIndex.__init__	picasa3meta.thumbindex.ThumbIndex-class.html#__init__
+picasa3meta.thumbindex.ThumbIndex.hasFaces	picasa3meta.thumbindex.ThumbIndex-class.html#hasFaces
+picasa3meta.thumbindex.ThumbIndex.imageName	picasa3meta.thumbindex.ThumbIndex-class.html#imageName
+picasa3meta.thumbindex.ThumbIndex.imagePath	picasa3meta.thumbindex.ThumbIndex-class.html#imagePath
+picasa3meta.thumbindex.ThumbIndex.getFaces	picasa3meta.thumbindex.ThumbIndex-class.html#getFaces
+picasa3meta.thumbindex.ThumbIndex.dumpFaces	picasa3meta.thumbindex.ThumbIndex-class.html#dumpFaces
+picasa3meta.thumbindex.ThumbIndex.imageFullName	picasa3meta.thumbindex.ThumbIndex-class.html#imageFullName
 picasa3meta.thumbindex.ThumbIndexError	picasa3meta.thumbindex.ThumbIndexError-class.html

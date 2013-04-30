@@ -68,47 +68,48 @@ object --+
 
 
 Read an entire picasa pmp database table.  This table resides in multiple
-files in Picasa3/db3 with names: &lt;table_name&gt;_&lt;column_name&gt;.pmp.  For example:
+files in Picasa3/db3 with names: &lt;table_name&gt;_&lt;column_name&gt;.pmp.
 
-        imagedata_aliasparents.pmp  imagedata_onlinechecksum.pmp
-        imagedata_avgcolor.pmp      imagedata_originfast.pmp
-        imagedata_backuphash.pmp    imagedata_originslow.pmp
-        imagedata_caption.pmp       imagedata_peoplealbumchecksum.pmp
-        imagedata_colorspace.pmp    imagedata_personalbumid.pmp
-        imagedata_crop64.pmp        imagedata_personalbumrecs2.pmp
-        imagedata_deferredface.pmp  imagedata_personalbumrecs.pmp
-        imagedata_edited.pmp        imagedata_personalbumrecvalues2.pmp
-        imagedata_facequality.pmp   imagedata_personalbumrecvalues.pmp
-        imagedata_facerectdata.pmp  imagedata_redo.pmp
-        imagedata_facerect.pmp      imagedata_revertable.pmp
-        imagedata_fileflags.pmp     imagedata_rotate.pmp
-        imagedata_fileid.pmp        imagedata_suggestionpersonalbumid.pmp
-        imagedata_filetype.pmp      imagedata_suppress.pmp
-        imagedata_filters.pmp       imagedata_tags.pmp
-        imagedata_flipped.pmp       imagedata_textactive.pmp
-        imagedata_geoview.pmp       imagedata_text.pmp
-        imagedata_height.pmp        imagedata_uid64.pmp
-        imagedata_lat.pmp           imagedata_wayne@mindtunnel.com_lhlist.pmp
-        imagedata_long.pmp          imagedata_width.pmp
+For example:
+
+    imagedata_aliasparents.pmp  imagedata_onlinechecksum.pmp
+    imagedata_avgcolor.pmp      imagedata_originfast.pmp
+    imagedata_backuphash.pmp    imagedata_originslow.pmp
+    imagedata_caption.pmp       imagedata_peoplealbumchecksum.pmp
+    imagedata_colorspace.pmp    imagedata_personalbumid.pmp
+    imagedata_crop64.pmp        imagedata_personalbumrecs2.pmp
+    imagedata_deferredface.pmp  imagedata_personalbumrecs.pmp
+    imagedata_edited.pmp        imagedata_personalbumrecvalues2.pmp
+    imagedata_facequality.pmp   imagedata_personalbumrecvalues.pmp
+    imagedata_facerectdata.pmp  imagedata_redo.pmp
+    imagedata_facerect.pmp      imagedata_revertable.pmp
+    imagedata_fileflags.pmp     imagedata_rotate.pmp
+    imagedata_fileid.pmp        imagedata_suggestionpersonalbumid.pmp
+    imagedata_filetype.pmp      imagedata_suppress.pmp
+    imagedata_filters.pmp       imagedata_tags.pmp
+    imagedata_flipped.pmp       imagedata_textactive.pmp
+    imagedata_geoview.pmp       imagedata_text.pmp
+    imagedata_height.pmp        imagedata_uid64.pmp
+    imagedata_lat.pmp           imagedata_wayne@mindtunnel.com_lhlist.pmp
+    imagedata_long.pmp          imagedata_width.pmp
 
 
 Usage:
 
-        from picasa3meta import pmpinfo
+    from picasa3meta import pmpinfo
 
-        pmp = pmpinfo.PmpInfo(&quot;/path/to/Picasa3/db3&quot;, &quot;imagedata&quot;)
+    pmp = pmpinfo.PmpInfo(&quot;/path/to/Picasa3/db3&quot;, &quot;imagedata&quot;)
 
-        print &quot;columns in %stable:&quot;%pmp.tableName
-        for col in pmp.columns:
-                print &quot;    %x&quot;%col
+    print &quot;columns in %stable:&quot;%pmp.tableName
+    for col in pmp.columns:
+        print &quot;    %x&quot;%col
 
-        for col, size in pmp.colSizes():
-                print &quot;column %s has %d entries&quot;%(col,size)
+    for col, size in pmp.colSizes():
+        print &quot;column %s has %d entries&quot;%(col,size)
 
-        print &quot;entry #500:&quot;
-        for col, value in pmp.getEntry(500):
-                print &quot;columns %s = %s&quot;%(col,value)
-        
+    print &quot;entry #500:&quot;
+    for col, value in pmp.getEntry(500):
+        print &quot;columns %s = %s&quot;%(col,value)
 
 </pre>
 
@@ -339,6 +340,25 @@ Usage:
       
     </td>
   </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="getCol"></a><span class="summary-sig-name">getCol</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">column</span>,
+        <span class="summary-sig-arg">index</span>)</span><br />
+      Return a value from the data dictionary</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="picasa3meta.pmpinfo-pysrc.html#PmpInfo.getCol">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
   <tr>
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code>object</code></b>:
@@ -422,29 +442,28 @@ Usage:
 
 Read the entire table.  Class variables are:
 
-tableName: 
-        i.e. 'imagedata'
-columns: 
-        list of columns, i.e. [ 'caption', 'date', 'filter', ... ]
+tableName:
+    i.e. 'imagedata'
+columns:
+    list of columns, i.e. [ 'caption', 'date', 'filter', ... ]
 data:
-        dictionary of all data, i.e. 
-        { 'caption':[ 'cap 0', 'cap 1', ... ], 
-          'date': [ d0, d1, ... ], ... }
-magic: 
-        list of magic byte from each file.  shoule be 
-        [ 0x3fcccccd, 0x3fcccccd, ... ]
-type1: 
-        list of type of data in this column: [ 0, 3, 0, 1, ...]
-c1:     
-        list of static shorts in the header: [ 0x1332, 0x1332, ...]
-c2:     
-        list of static longs in the header: 
-        [ 0x02, 0x02, 0x02, ...] (see doHeader())
-type2: 
-        list of type of data in this column.  must equal type1
-size:  
-        list of length of each column: [ 2000, 3000, 1295, ... ]
-        
+    dictionary of all data, i.e.
+    { 'caption':[ 'cap 0', 'cap 1', ... ],
+      'date': [ d0, d1, ... ], ... }
+magic:
+    list of magic byte from each file.  shoule be
+    [ 0x3fcccccd, 0x3fcccccd, ... ]
+type1:
+    list of type of data in this column: [ 0, 3, 0, 1, ...]
+c1:
+    list of static shorts in the header: [ 0x1332, 0x1332, ...]
+c2:
+    list of static longs in the header:
+    [ 0x02, 0x02, 0x02, ...] (see doHeader())
+type2:
+    list of type of data in this column.  must equal type1
+size:
+    list of length of each column: [ 2000, 3000, 1295, ... ]
 
 </pre>
   <dl class="fields">
@@ -537,7 +556,7 @@ size:
 
 Return the entry as a list of tuples:
 
-        [ (col1name,val1), (col2name,val2), ... ]
+    [ (col1name,val1), (col2name,val2), ... ]
 
 If the index is not valid the val[n]'s will be all empty strings.
 
@@ -573,7 +592,7 @@ If the index is not valid the val[n]'s will be all empty strings.
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu Aug 30 10:31:23 2012
+    Generated by Epydoc 3.0.1 on Mon Apr 29 22:15:50 2013
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

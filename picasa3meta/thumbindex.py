@@ -23,237 +23,250 @@ import os
 
 
 class ThumbError(Exception):
-	pass
+    pass
 
-class	MagicError(ThumbError):
-	pass
+class    MagicError(ThumbError):
+    pass
 
 class   ThumbIndexError(ThumbError):
-	pass
+    pass
 
 class ThumbIndex(object):
-	'''
-	Read the Picasa3 thumbindex.db file, verify the magic byte and save 
-	all entries into the name[] and pathIndex[] lists
-		
-	If a files has been removed from Picasa3 that thumbindex entry will not be 
-	reused.  Requesting that entry will return a null file/path name.  
+    '''
+    Read the Picasa3 thumbindex.db file, verify the magic byte and save
+    all entries into the name[] and pathIndex[] lists
 
-	Requesting the index of a file that does not exist (or has been deleted)
-	will return -1 (0xffffffff)
-	
-	usage: 
-		from picasa3meta import thumbindex
-		
-		db = thumbindex.ThumbIndex("/path/to/Picasa3/db3/thumbindex.db")
+    If a files has been removed from Picasa3 that thumbindex entry will not be
+    reused.  Requesting that entry will return a null file/path name.
 
-		# find index of image.jpg data in Picasa3 imagedata_xxx.pmp files
-		pmpIndex = db.indexOfFile("/full/path/to/Picasa3/image.jpg")
+    Requesting the index of a file that does not exist (or has been deleted)
+    will return -1 (0xffffffff)
 
-		# find the basename of the image file at pmpIndex
-		imageName = db.imageName(pmpIndex)
+    usage:
+        from picasa3meta import thumbindex
 
-		# find the path of the image file at pmpIndex
-		imagePath = db.imagePath(pmpIndex)
+        db = thumbindex.ThumbIndex("/path/to/Picasa3/db3/thumbindex.db")
 
-		# return the full path/file name of the image file at pmpIndex
-		imageFullName = db.imageFullName(pmpIndex)
+        # find index of image.jpg data in Picasa3 imagedata_xxx.pmp files
+        pmpIndex = db.indexOfFile("/full/path/to/Picasa3/image.jpg")
 
-		# assuming pmp is a pmpinfo object for the imagedata table, retrieve
-		# the database entry for a file
-		index = db.indexOfFile("/full/path/to/file.jpg")
-		for col, val in pmp.getEntry(index):
-			print "column %s is %s"%(col,val)
-	
-	The thumbindex.db file format is:
+        # find the basename of the image file at pmpIndex
+        imageName = db.imageName(pmpIndex)
 
-		|magic byte |# entries	|null terminated path/file |	
-		|40 46 66 66|xx xx xx xx|ascii ................. 00|	
+        # find the path of the image file at pmpIndex
+        imagePath = db.imagePath(pmpIndex)
 
-		|26 bytes unknown                                  |
-		|xx xx xx xx xx xx ............................. xx|	
+        # return the full path/file name of the image file at pmpIndex
+        imageFullName = db.imageFullName(pmpIndex)
 
-		|index      |repeat from 'null terminated path/file' above ...
-		|xx xx xx xx|	
+        # assuming pmp is a pmpinfo object for the imagedata table, retrieve
+        # the database entry for a file
+        index = db.indexOfFile("/full/path/to/file.jpg")
+        for col, val in pmp.getEntry(index):
+            print "column %s is %s"%(col,val)
 
-		The index is the index into the array for the entry of the parent 
-		directory of the file, or 0xffffffff if this entry is a directory.
+    The thumbindex.db file format is:
 
-		If the file path/filename length is 0 then this file or path has been 
-		deleted.	Just set the index to 0xffffffff so that it is ignored.
+        |magic byte |# entries    |null terminated path/file |
+        |40 46 66 66|xx xx xx xx|ascii ................. 00|
 
-	'''
-	
-	def __init__(self,thumbindex):
-		'''
+        |26 bytes unknown                                  |
+        |xx xx xx xx xx xx ............................. xx|
 
-		Open file "thumbindex", verify the magic byte (0x40466666), and then 
-		read all entries into name[], pathIndex[] arrays.
-		
-		'''
-		
-		self.header = array.array('I')
-		self.entries = 0
-		self.name = []
-		self.unknown26 = []
-		self.orgPathIndex = array.array('I')
-		self.pathIndex = array.array('I')
-		
-		self.facesArray = {}
-		
-		self.inFile = open(thumbindex,"rb")
-		self.header.fromfile(self.inFile,2)
-				
-		if self.header[0] != 0x40466666:
-			raise MagicError("magic bytes %#x != 0x40466666"%self.header[0])
-			
-		self.entries = self.header[1]   # number of entries I expect to find
-		
-		self.index = 0
-		self.name.append("")
-		
-		while True:
-			# thumb entry begins with a null terminated string which gives 
-			# the filename or pathname
-			self.b = self.inFile.read(1)
-			if len(self.b) == 0:	# EOF
-				if self.index != self.entries:
-					raise ThumbIndexError(
-						"expected %d entries but only found %d"%
-						(self.entries,self.index))
-				else:
-					return
-			
-			# file/path name will terminate with a null or 0xff char
-			# 0xff?  not sure where this came from but I'm going to leave it in.
-			if self.b == chr(0xff) or self.b == chr(0):
-				# self.a = self.inFile.read(26)   # toss the next 26 bytes
-				self.unknown26.append(array.array('B'))
-				self.unknown26[self.index].fromfile(self.inFile,26)
-				# the next int is the index into the names array of the 
-				# path to this file or 0xffffffff if this is a directory
-				self.pathIndex.fromfile(self.inFile,1)
-				self.orgPathIndex.append(self.pathIndex[self.index])
-				
-				if len(self.name[self.index]) == 0:
-					# if there was no file name read then this file or 
-					# directory has been deleted.  Just set the path to 
-					# 0xffffffffff so we ignore it
-					self.pathIndex[self.index] = 0xffffffff
-					# now populate the facesArray dictionary --
-					# facesArray = { image_index:[ face1_index, face2_index, ...], ... }
-					#
-					if self.orgPathIndex[self.index] != 0xffffffff:
-						if self.facesArray.has_key(self.orgPathIndex[self.index]):
-							self.facesArray[self.orgPathIndex[self.index]].append(self.index)
-						else:
-							self.facesArray[self.orgPathIndex[self.index]] = []
-							self.facesArray[self.orgPathIndex[self.index]].append(self.index)
-							
-				self.index += 1
-				self.name.append("")
-			else:
-				self.name[self.index] += self.b  # valid file/path name char
-				
-	
-	def indexOfFile(self,findMe):
-		'''
-		
-		Find the index into the imagedata_xxx.pmp files for an image file.  
-		Returns -1 if the image file is not found.
-		
-		'''
-		
-		self.findPath = os.path.dirname(findMe)+"/"
-		self.findName = os.path.basename(findMe)
-		
-		for i in range(self.entries):
-			if self.pathIndex[i] != 0xffffff:
-				if self.name[i] == self.findName:
-					if self.name[self.pathIndex[i]] == self.findPath:
-						return i
-			
-		return -1
-	
-	def imagePath(self,what):
-		'''	   
-		
-		Find the path of the file at entry 'what'.
-		
-		If entry 'what' is a directory itself or is an image that has been removed,
-		just return an empty string.  An exception will be thrown if you ask for an
-		entry > number of entries in thumbindex.db (self.entries)
-		
-		'''
-		
-		if self.pathIndex[what] == 0xffffffff:
-			return ""
-		else:
-			return self.name[self.pathIndex[what]]
-		
-	def imageName(self,what):
-		'''	   
-		
-		Find the basename of the file at entry 'what'.
-		
-		An exception will be thrown if you ask for an entry > number of entries in 
-		thumbindex.db (self.entries)
+        |index      |repeat from 'null terminated path/file' above ...
+        |xx xx xx xx|
 
-		'''
-		
-		return self.name[what]
-	
-	def imageFullName(self,what):
-		'''	 
-		Find the full path name of the file/directory at entry 'what'.
-		
-		An exception will be thrown if you ask for an entry > number of entries in 
-		thumbindex.db (self.entries)
-		
-		'''
-		
-		return os.path.join(self.imagePath(what),self.imageName(what))
-	
-	
-	
-	def getFaces(self,what):
-		'''return a list of the faces in 'what' '''
-		
-		if self.facesArray.has_key(what):
-			return self.facesArray[what]
-		else:
-			return None
-		
-		
-		
-	def dumpFaces(self,what):
-		'''dump the faces array for image 'what' '''
-		
-		if self.facesArray.has_key(what):
-			print 'list of faces for %d:%s'%(what,self.name[what]),'is ',self.facesArray[what]
-			return True
-		else:
-			#print 'no faces for %d:%s'%(what,self.name[what])
-			return False
-			
-		
-		
-	def dump(self,what):
-		'''diagnostic dump of the entry at 'what' '''
-		
-		print '\n[%06d / %#08x] '%(what,what),
-		if self.orgPathIndex[what] == 0xffffffff: # directory
-			print 'd[%s] p[%#0x]'%(self.name[what],self.orgPathIndex[what])
-		else:
-			if len(self.name[what]) > 0 and self.pathIndex[what] == 0xffffffff:
-				print 'r[%s] p[%06d]'%(self.name[what],self.orgPathIndex[what])
-			elif len(self.name[what]) > 0 and self.pathIndex[what] != 0xffffffff:
-				print 'f[%s] p[%06d : %s]'%(self.name[what],self.pathIndex[what],self.name[self.pathIndex[what]])
-			elif len(self.name[what]) == 0 and self.orgPathIndex != 0xffffffff:
-				print '?[%s] p[%06d : %s]'%(self.name[what],self.orgPathIndex[what],self.name[self.orgPathIndex[what]])
-			else:
-				print '-[%s] p[%06d]'%(self.name[what],self.orgPathIndex[what])
-		for i in range(26):
-			print '%02x '%self.unknown26[what][i],
-		print ''
-		
+        The index is the index into the array for the entry of the parent
+        directory of the file, or 0xffffffff if this entry is a directory.
+
+        If the file path/filename length is 0 then this file or path has been
+        deleted.    Just set the index to 0xffffffff so that it is ignored.
+
+    '''
+
+    def __init__(self, thumbindex):
+        '''
+
+        Open file "thumbindex", verify the magic byte (0x40466666), and then
+        read all entries into name[], pathIndex[] arrays.
+
+        '''
+
+        self.header = array.array('I')
+        self.entries = 0
+        self.name = []
+        self.unknown26 = []
+        self.orgPathIndex = array.array('I')
+        self.pathIndex = array.array('I')
+
+        self.facesArray = {}
+
+        self.inFile = open(thumbindex, "rb")
+        self.header.fromfile(self.inFile, 2)
+
+        if self.header[0] != 0x40466666:
+            raise MagicError("magic bytes %#x != 0x40466666" % self.header[0])
+
+        self.entries = self.header[1]  # number of entries I expect to find
+
+        self.index = 0
+        self.name.append("")
+
+        while True:
+            # thumb entry begins with a null terminated string which gives
+            # the filename or pathname
+            self.b = self.inFile.read(1)
+            if len(self.b) == 0:  # EOF
+                if self.index != self.entries:
+                    raise ThumbIndexError(
+                        "expected %d entries but only found %d" %
+                        (self.entries, self.index))
+                else:
+                    return
+
+            # file/path name will terminate with a null or 0xff char
+            # 0xff? not sure where this came from but I'm going to leave it in.
+            if self.b == chr(0xff) or self.b == chr(0):
+                # self.a = self.inFile.read(26)   # toss the next 26 bytes
+                self.unknown26.append(array.array('B'))
+                self.unknown26[self.index].fromfile(self.inFile, 26)
+                # the next int is the index into the names array of the
+                # path to this file or 0xffffffff if this is a directory
+                self.pathIndex.fromfile(self.inFile, 1)
+                self.orgPathIndex.append(self.pathIndex[self.index])
+
+                if len(self.name[self.index]) == 0:
+                    # if there was no file name read then this file or
+                    # directory has been deleted.  Just set the path to
+                    # 0xffffffffff so we ignore it
+                    self.pathIndex[self.index] = 0xffffffff
+                    # now populate the facesArray dictionary --
+                    # facesArray = { image_index:[ face1_index,
+                    #                face2_index, ...], ... }
+                    #
+                    if self.orgPathIndex[self.index] != 0xffffffff:
+                        if self.facesArray.has_key(
+                                self.orgPathIndex[self.index]):
+                            self.facesArray[self.orgPathIndex[self.index]].\
+                                append(self.index)
+                        else:
+                            self.facesArray[self.orgPathIndex[self.index]] = []
+                            self.facesArray[self.orgPathIndex[self.index]].\
+                                append(self.index)
+
+                self.index += 1
+                self.name.append("")
+            else:
+                self.name[self.index] += self.b  # valid file/path name char
+
+
+    def indexOfFile(self, findMe):
+        '''
+
+        Find the index into the imagedata_xxx.pmp files for an image file.
+        Returns -1 if the image file is not found.
+
+        '''
+
+        self.findPath = os.path.dirname(findMe) + "/"
+        self.findName = os.path.basename(findMe)
+
+        for i in range(self.entries):
+            if self.pathIndex[i] != 0xffffff:
+                if self.name[i] == self.findName:
+                    if self.name[self.pathIndex[i]] == self.findPath:
+                        return i
+
+        return -1
+
+    def imagePath(self, what):
+        '''
+
+        Find the path of the file at entry 'what'.
+
+        If entry 'what' is a directory itself or is an image that has been
+        removed, just return an empty string.  An exception will be thrown
+        if you ask for an entry > number of entries in thumbindex.db
+
+        '''
+
+        if self.pathIndex[what] == 0xffffffff:
+            return ""
+        else:
+            return self.name[self.pathIndex[what]]
+
+    def imageName(self, what):
+        '''
+
+        Find the basename of the file at entry 'what'.
+
+        An exception will be thrown if you ask for an entry > number of entries
+        in thumbindex.db (self.entries)
+
+        '''
+
+        return self.name[what]
+
+    def imageFullName(self, what):
+        '''
+        Find the full path name of the file/directory at entry 'what'.
+
+        An exception will be thrown if you ask for an entry > number of entries
+        in thumbindex.db (self.entries)
+
+        '''
+
+        return os.path.join(self.imagePath(what), self.imageName(what))
+
+
+
+    def getFaces(self, what):
+        '''return a list of the faces in 'what' '''
+
+        if self.facesArray.has_key(what):
+            return self.facesArray[what]
+        else:
+            return None
+
+    def hasFaces(selfself, what):
+        '''return true if there is an entry in facesArray for this entry'''
+
+        if self.facesArray.has_key(what):
+            return True
+        else:
+            return False
+
+
+    def dumpFaces(self, what):
+        '''dump the faces array for image 'what' '''
+
+        if self.facesArray.has_key(what):
+            return self.facesArray[what]
+        else:
+            return None
+
+
+
+    def dump(self, what):
+        '''diagnostic dump of the entry at 'what' '''
+
+        print '\n[%06d / %#08x] ' % (what, what),
+        if self.orgPathIndex[what] == 0xffffffff:  # directory
+            print 'd[%s] p[%#0x]' % (self.name[what], self.orgPathIndex[what])
+        else:
+            if len(self.name[what]) > 0 and self.pathIndex[what] == 0xffffffff:
+                print 'r[%s] p[%06d]'\
+                    % (self.name[what], self.orgPathIndex[what])
+            elif len(self.name[what]) > 0 and \
+                    self.pathIndex[what] != 0xffffffff:
+                print 'f[%s] p[%06d : %s]' % (self.name[what],
+                    self.pathIndex[what], self.name[self.pathIndex[what]])
+            elif len(self.name[what]) == 0 and self.orgPathIndex != 0xffffffff:
+                print '?[%s] p[%06d : %s]' % (self.name[what],
+                    self.orgPathIndex[what], self.name[self.orgPathIndex[what]])
+            else:
+                print '-[%s] p[%06d]' % (self.name[what],
+                    self.orgPathIndex[what])
+        for i in range(26):
+            print '%02x ' % self.unknown26[what][i],
+        print ''
